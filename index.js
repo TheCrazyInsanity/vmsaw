@@ -108,7 +108,7 @@ const newmsg = function(isserver, guildid, channelid, content){
         ognum = fs.readFileSync(`./bin/servers/${guildid}/ognum.txt`)
         curnum = fs.readFileSync(`./bin/servers/${guildid}/curnum.txt`)
         if(curnum >= ognum){
-            if(client.guilds.cache.get(guildid).members.cache.get(client.user.id).permissionsIn(channelid, "SEND_MESSAGES")){
+            if(client.guilds.cache.get(guildid).members.cache.get(client.user.id).permissionsIn(channelid).has("SEND_MESSAGES")){
                 client.guilds.cache.get(guildid).channels.cache.get(channelid).sendTyping()
                 markovgen(true, guildid).then((result)=>{
                     if(result==""||result==" "){
