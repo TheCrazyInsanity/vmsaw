@@ -196,10 +196,8 @@ client.on('messageCreate', (msg) =>{
                 if(msg.channel.type=="GROUP_DM"){
                     console.log("gc")
                     dlmsg(false, msg.channelId, msg.content)
-                    if(msg.mentions.users.get(client.user.id) == undefined){
-                        newmsg(false, null, msg.channelId, msg.content)
-                    }else{
-                        setTimeout(function() {
+                    if(msg.mentions.users.get(client.user.id) || msg.content.toLowerCase().includes("waffle")){
+			setTimeout(function() {
                             client.channels.cache.get(msg.channelId).sendTyping()
                             markovgen(false, msg.channelId).then((result) =>{
                                 if(result==""||result==" "){
@@ -212,6 +210,8 @@ client.on('messageCreate', (msg) =>{
                                 }, (result.length/((100*5)/60)) * 1000); //(message.length/((wordsPerMinute*5)/60)) * 1000
                             })
                         }, Math.floor(Math.random() * 3000)+1000)
+                    }else{
+                        newmsg(false, null, msg.channelId, msg.content)
                     }
                 }else{
                     console.log("dm")
