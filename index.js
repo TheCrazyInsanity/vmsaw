@@ -8,6 +8,7 @@ const markov = require('markovchain')
 //Fs because files yay
 const fs = require('fs');
 const slurslist = new RegExp(fs.readFileSync("./1984.txt", "utf8"), "gi")
+const blockedusers = fs.readFileSync("./blockedusers.txt", "utf8").split(',')
 
 // Create a new client instance
 const client = new Client({checkUpdate:false});
@@ -168,7 +169,7 @@ client.on('messageCreate', (msg) =>{
     if(msg.author.id != client.user.id){
             if(msg.guildId != null){
                 console.log("Server")
-                if(msg.author.id!="1058783679310209175" || msg.author.id != "825476927284445254"){ //I didnt like these guys (they spammed)
+                if(blockedusers.includes(msg.author.id) == false){ //I didnt like these guys (they spammed)
                     dlmsg(true, msg.guildId, msg.content)
                 }
                 if(msg.mentions.users.get(client.user.id) == undefined){
@@ -195,7 +196,9 @@ client.on('messageCreate', (msg) =>{
                 //console.log(msg.channel)
                 if(msg.channel.type=="GROUP_DM"){
                     console.log("gc")
-                    dlmsg(false, msg.channelId, msg.content)
+                    if(blockedusers.includes(msg.author.id) == false){ //I didnt like these guys (they spammed)
+                        dlmsg(true, msg.guildId, msg.content)
+                    }
                     if(msg.mentions.users.get(client.user.id) || msg.content.toLowerCase().includes("waffle")){
 			setTimeout(function() {
                             client.channels.cache.get(msg.channelId).sendTyping()
